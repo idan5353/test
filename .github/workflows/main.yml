@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y conntrack golang-go git
+        sudo apt-get install -y conntrack golang-go git make
 
     - name: Clone cri-dockerd
       run: |
@@ -27,8 +27,8 @@ jobs:
 
     - name: Check for cri-dockerd binary
       run: |
-        if [ -f ./bin/cri-dockerd ]; then
-          sudo cp ./bin/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
+        if [ -f cri-dockerd/bin/cri-dockerd ]; then
+          sudo cp cri-dockerd/bin/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
         else
           echo "cri-dockerd binary not found!"
           exit 1
