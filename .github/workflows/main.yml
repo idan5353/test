@@ -31,8 +31,13 @@ jobs:
     - name: Configure kubectl
       run: |
         echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-        export KUBECONFIG=$(pwd)/kubeconfig
+        KUBECONFIG=$(pwd)/kubeconfig kubectl config get-contexts
 
     - name: Deploy to Kubernetes
       run: |
-        kubectl set image deployment/hello-world-app hello-world-container=idan535/hello-world-app:latest
+        KUBECONFIG=$(pwd)/kubeconfig kubectl set image deployment/hello-world-app hello-world-container=idan535/hello-world-app:latest
+
+    - name: Debug kubectl
+      run: |
+        KUBECONFIG=$(pwd)/kubeconfig kubectl cluster-info
+        KUBECONFIG=$(pwd)/kubeconfig kubectl get nodes
