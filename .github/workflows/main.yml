@@ -33,6 +33,11 @@ jobs:
         echo "${{ secrets.KUBE_CONFIG }}" | sed 's|C:\\Users\\Idan Uziel\\.minikube|/home/runner/.minikube|g' > kubeconfig
         export KUBECONFIG=$(pwd)/kubeconfig
 
+    - name: Check kubeconfig files
+      run: |
+        ls -l /home/runner/.minikube/profiles/minikube/
+        ls -l /home/runner/.minikube/
+
     - name: Debug kubectl
       run: |
         KUBECONFIG=$(pwd)/kubeconfig kubectl cluster-info
