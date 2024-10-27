@@ -28,7 +28,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y conntrack
         curl -LO https://github.com/kubernetes-sigs/cri-tools/releases/latest/download/crictl-v1.26.0-linux-amd64.tar.gz
-        tar -C /usr/local/bin --strip-components=1 -xzvf crictl-v1.26.0-linux-amd64.tar.gz
+        tar -xzvf crictl-v1.26.0-linux-amd64.tar.gz -C /tmp
+        sudo cp /tmp/crictl /usr/local/bin/
         sudo chmod +x /usr/local/bin/crictl
 
     - name: Install Minikube
