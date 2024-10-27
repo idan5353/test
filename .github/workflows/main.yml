@@ -22,9 +22,9 @@ jobs:
       run: |
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
-        git checkout v0.2.4  # או גרסה מתאימה אחרת
-        make
-        sudo make install
+        git checkout v0.2.4
+        make  # בנה את cri-dockerd
+        sudo cp ./cri-dockerd /usr/local/bin/cri-dockerd  # העתק את הבינארי למקום הנכון
 
     - name: Download and install Minikube
       run: |
