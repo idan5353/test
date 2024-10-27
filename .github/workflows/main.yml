@@ -32,6 +32,14 @@ jobs:
         sudo cp /tmp/crictl /usr/local/bin/
         sudo chmod +x /usr/local/bin/crictl
 
+    - name: Install cri-dockerd
+      run: |
+        git clone https://github.com/Mirantis/cri-dockerd.git
+        cd cri-dockerd
+        git checkout v0.2.4  # בחר גרסה מתאימה
+        make
+        sudo make install
+
     - name: Install Minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
