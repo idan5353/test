@@ -30,14 +30,14 @@ jobs:
 
     - name: Configure kubectl
       run: |
-        echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-        KUBECONFIG=$(pwd)/kubeconfig kubectl config get-contexts
-
-    - name: Deploy to Kubernetes
-      run: |
-        KUBECONFIG=$(pwd)/kubeconfig kubectl set image deployment/hello-world-app hello-world-container=idan535/hello-world-app:latest
+        echo "${{ secrets.KUBE_CONFIG }}" | sed 's|C:\\Users\\Idan Uziel\\.minikube|/home/runner/.minikube|g' > kubeconfig
+        export KUBECONFIG=$(pwd)/kubeconfig
 
     - name: Debug kubectl
       run: |
         KUBECONFIG=$(pwd)/kubeconfig kubectl cluster-info
         KUBECONFIG=$(pwd)/kubeconfig kubectl get nodes
+
+    - name: Deploy to Kubernetes
+      run: |
+        KUBECONFIG=$(pwd)/kubeconfig kubectl set image deployment/hello-world-app hello-world-container=idan535/hello-world-app:latest
