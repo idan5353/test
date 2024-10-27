@@ -23,6 +23,9 @@ jobs:
     - name: Push Docker image
       run: docker push idan535/hello-world-app:latest
 
+    - name: Install conntrack
+      run: sudo apt-get update && sudo apt-get install -y conntrack
+
     - name: Install Minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
