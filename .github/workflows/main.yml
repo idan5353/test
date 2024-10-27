@@ -23,8 +23,9 @@ jobs:
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
         git checkout v0.2.4
-        make  # בנה את cri-dockerd
-        sudo cp ./cri-dockerd /usr/local/bin/cri-dockerd  # העתק את הבינארי למקום הנכון
+        make  # Build cri-dockerd
+        ls -l  # List files to verify build output
+        sudo cp ./cri-dockerd/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
 
     - name: Download and install Minikube
       run: |
