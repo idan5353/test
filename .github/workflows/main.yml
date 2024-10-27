@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master  # או הבראנצ'ים המתאימים
+      - master
 
 jobs:
   build:
@@ -13,36 +13,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Build Docker image
-      run: |
-        docker build -t idan535/hello-world-app:latest .
-
-    - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-    - name: Push Docker image
-      run: docker push idan535/hello-world-app:latest
-
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y conntrack golang-go  # התקנת go
-        curl -LO https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.26.0/crictl-v1.26.0-linux-amd64.tar.gz
-        tar -xzvf crictl-v1.26.0-linux-amd64.tar.gz -C /tmp
-        sudo cp /tmp/crictl /usr/local/bin/
-        sudo chmod +x /usr/local/bin/crictl
+        sudo apt-get install -y conntrack golang-go git
 
-    - name: Install cri-dockerd
+    - name: Clone cri-dockerd
       run: |
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
-        git checkout v0.2.4  # בחר גרסה מתאימה
-        sudo go install ./...  # שימוש ב-go להתקנה
+        git checkout v0.2.4  # או גרסה מתאימה אחרת
+        make
+        sudo make install
 
-    - name: Install Minikube
+    - name: Download and install Minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+    - name: Start Minikube
+      run: |
         minikube start --driver=none
 
     - name: Set up kubectl
