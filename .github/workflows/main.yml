@@ -27,12 +27,12 @@ jobs:
     - name: Build cri-dockerd
       run: |
         cd cri-dockerd
-        make  # Build cri-dockerd
+        make || { echo "Build failed!"; exit 1; }  # Build cri-dockerd
 
     - name: List build output
       run: |
         cd cri-dockerd
-        ls -l bin  # Check what binaries were built
+        ls -l bin || echo "No binaries found in bin"  # Check what binaries were built
 
     - name: Check for cri-dockerd binary
       run: |
