@@ -25,6 +25,10 @@ jobs:
         git checkout v0.2.4
         make  # Build cri-dockerd
 
+    - name: List bin directory
+      run: |
+        ls -l cri-dockerd/bin  # Check what binaries were built
+
     - name: Check for cri-dockerd binary
       run: |
         if [ -f cri-dockerd/bin/cri-dockerd ]; then
