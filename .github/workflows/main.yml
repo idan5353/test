@@ -37,8 +37,8 @@ jobs:
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
         git checkout v0.2.4  # בחר גרסה מתאימה
-        make
-        sudo make install
+        sudo make build
+        sudo cp cri-dockerd /usr/local/bin/
 
     - name: Install Minikube
       run: |
