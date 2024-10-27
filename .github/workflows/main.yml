@@ -23,11 +23,16 @@ jobs:
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
         git checkout v0.2.4
+
+    - name: Build cri-dockerd
+      run: |
+        cd cri-dockerd
         make  # Build cri-dockerd
 
-    - name: List bin directory
+    - name: List build output
       run: |
-        ls -l cri-dockerd/bin  # Check what binaries were built
+        cd cri-dockerd
+        ls -l bin  # Check what binaries were built
 
     - name: Check for cri-dockerd binary
       run: |
