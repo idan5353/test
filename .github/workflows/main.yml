@@ -23,6 +23,11 @@ jobs:
     - name: Push Docker image
       run: docker push idan535/my-image:latest
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y conntrack
+
     - name: Set up Minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
