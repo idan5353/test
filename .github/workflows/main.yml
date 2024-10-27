@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -13,60 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
+    - name: Build Docker image
       run: |
-        sudo apt-get update
-        sudo apt-get install -y conntrack golang-go git make
+        docker build -t idan535/my-image:latest .
 
-    - name: Clone cri-dockerd
-      run: |
-        git clone https://github.com/Mirantis/cri-dockerd.git
-        cd cri-dockerd
-        git checkout v0.2.4
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Build cri-dockerd
-      run: |
-        cd cri-dockerd
-        make || { echo "Build failed!"; exit 1; }  # Build cri-dockerd
-
-    - name: List build output
-      run: |
-        cd cri-dockerd
-        ls -l bin || echo "No binaries found in bin"  # Check what binaries were built
-
-    - name: Check for cri-dockerd binary
-      run: |
-        if [ -f bin/cri-dockerd ]; then
-          sudo cp bin/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
-        else
-          echo "cri-dockerd binary not found!"
-          exit 1
-        fi
-
-    - name: Download and install Minikube
-      run: |
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        sudo install minikube-linux-amd64 /usr/local/bin/minikube
-
-    - name: Start Minikube
-      run: |
-        minikube start --driver=none
-
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v1
-      with:
-        version: 'latest'
-
-    - name: Configure kubectl
-      run: |
-        minikube kubectl -- config view --raw > kubeconfig
-        export KUBECONFIG=$(pwd)/kubeconfig
-
-    - name: Debug kubectl
-      run: |
-        KUBECONFIG=$(pwd)/kubeconfig kubectl cluster-info
-        KUBECONFIG=$(pwd)/kubeconfig kubectl get nodes
+    - name: Push Docker image
+      run: docker push idan535/my-image:latest
 
     - name: Deploy to Kubernetes
       run: |
-        KUBECONFIG=$(pwd)/kubeconfig kubectl set image deployment/hello-world-app hello-world-container=idan535/hello-world-app:latest
+        kubectl set image deployment/my-app my-container=idan535/my-image:latest
