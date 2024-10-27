@@ -23,6 +23,18 @@ jobs:
     - name: Push Docker image
       run: docker push idan535/my-image:latest
 
+    - name: Set up Minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start --driver=none
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'latest'
+
     - name: Deploy to Kubernetes
       run: |
+        KUBECONFIG=$(minikube config view --raw)
         kubectl set image deployment/my-app my-container=idan535/my-image:latest
