@@ -33,8 +33,8 @@ jobs:
         git clone https://github.com/Mirantis/cri-dockerd.git
         cd cri-dockerd
         git checkout v0.2.4
-        make build  # Build the cri-dockerd binary
-        sudo cp cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary to the right location
+        make static-linux  # Build the static binary
+        sudo cp build/linux/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary to the right location
 
     - name: Set up Minikube
       run: |
