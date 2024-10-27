@@ -24,7 +24,15 @@ jobs:
         cd cri-dockerd
         git checkout v0.2.4
         make  # Build cri-dockerd
-        sudo cp ./bin/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
+
+    - name: Check for cri-dockerd binary
+      run: |
+        if [ -f ./bin/cri-dockerd ]; then
+          sudo cp ./bin/cri-dockerd /usr/local/bin/cri-dockerd  # Copy the binary if it exists
+        else
+          echo "cri-dockerd binary not found!"
+          exit 1
+        fi
 
     - name: Download and install Minikube
       run: |
