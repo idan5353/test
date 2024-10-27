@@ -23,6 +23,12 @@ jobs:
     - name: Push Docker image
       run: docker push idan535/hello-world-app:latest
 
+    - name: Install Minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start --driver=none
+
     - name: Set up kubectl
       uses: azure/setup-kubectl@v1
       with:
@@ -30,13 +36,8 @@ jobs:
 
     - name: Configure kubectl
       run: |
-        echo "${{ secrets.KUBE_CONFIG }}" | sed 's|C:\\Users\\Idan Uziel\\.minikube|/home/runner/.minikube|g' > kubeconfig
+        minikube kubectl -- config view --raw > kubeconfig
         export KUBECONFIG=$(pwd)/kubeconfig
-
-    - name: Check kubeconfig files
-      run: |
-        ls -l /home/runner/.minikube/profiles/minikube/
-        ls -l /home/runner/.minikube/
 
     - name: Debug kubectl
       run: |
